@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuscany Box — Inferno</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0D0402;--bg2:#1A0804;--bg3:#2A0E06;
+  --red:#C0392B;--red2:#E74C3C;--red-dim:#8B2318;
+  --gold:#C8860A;--panna:#F5EDD6;--grigio:#9E7E7A;
+  --bianco:#FFF8F6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--panna);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);transition:all .4s}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;letter-spacing:-.02em;text-decoration:none}
+.nav-logo span{font-style:italic}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{text-decoration:none;font-size:.72rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;transition:color .3s;opacity:.7}
+.nav-links a:hover{opacity:1}
+.nav-back{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;opacity:.55;transition:opacity .3s;padding:.45rem .9rem;border:1px solid currentColor;font-family:'Jost',sans-serif}
+.nav-back:hover{opacity:1}
+@media(max-width:700px){.nav-links{display:none}}
+
+nav{background:rgba(13,4,2,.88);color:var(--panna)}
+.nav-logo{color:var(--panna)}.nav-logo span{color:var(--red2)}
+.nav-links a{color:var(--panna)}.nav-links a:hover{color:var(--red2)}
+.nav-back{color:var(--panna)}
+
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 2rem 5rem;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 70% 60% at 50% 60%,rgba(192,57,43,.18) 0%,transparent 70%),
+             radial-gradient(ellipse 100% 50% at 50% 100%,rgba(139,35,24,.3) 0%,transparent 60%),
+             linear-gradient(180deg,var(--bg) 0%,var(--bg2) 50%,var(--bg3) 100%);
+}
+/* ember particles */
+.ember{position:absolute;border-radius:50%;pointer-events:none;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) scale(1);opacity:.8}100%{transform:translateY(-100vh) scale(0);opacity:0}}
+.hero-dante{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-style:italic;color:rgba(192,57,43,.7);letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .1s ease forwards}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(4rem,10vw,9rem);line-height:.95;font-weight:700;color:var(--panna);opacity:0;animation:fadeUp .9s .2s ease forwards;letter-spacing:-.02em}
+.hero-title em{font-style:italic;color:var(--red2);display:block;font-size:.55em}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;line-height:1.9;color:var(--grigio);max-width:520px;margin:1.5rem auto 2.5rem;opacity:0;animation:fadeUp .9s .35s ease forwards}
+.hero-quote{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:rgba(192,57,43,.6);margin-bottom:2.5rem;opacity:0;animation:fadeUp .9s .5s ease forwards}
+.btn-order{background:var(--red);color:var(--panna);border:none;padding:1rem 2.8rem;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .35s;text-decoration:none;display:inline-block;opacity:0;animation:fadeUp .9s .65s ease forwards}
+.btn-order:hover{background:var(--red2);transform:translateY(-3px);box-shadow:0 12px 30px rgba(192,57,43,.4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* divider flame */
+.flame-divider{display:flex;align-items:center;justify-content:center;gap:1rem;padding:2rem;font-size:1.4rem;opacity:.4}
+.flame-line{flex:1;max-width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--red-dim),transparent)}
+
+/* INGREDIENTS */
+.ingredients-section{max-width:1000px;margin:0 auto;padding:4rem 2rem 6rem}
+.ing-header-section{text-align:center;margin-bottom:3rem}
+.ing-tag{font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--red2);font-weight:500;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:.8rem}
+.ing-tag::before,.ing-tag::after{content:'';width:24px;height:1px;background:var(--red-dim);display:block}
+.ing-section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:var(--panna);line-height:1.15}
+.ing-section-title em{font-style:italic;color:var(--red2)}
+.ing-section-desc{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--grigio);margin-top:.8rem;font-weight:300;line-height:1.8}
+.ing-grid{display:flex;flex-direction:column;gap:1.2rem}
+.ing-card{
+  background:rgba(26,8,4,.6);
+  border:1px solid rgba(192,57,43,.15);
+  border-left:3px solid var(--red);
+  padding:1.8rem 2rem;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .6s ease, transform .6s ease, border-color .3s, background .3s;
+  transition-delay:var(--delay);
+}
+.ing-card.visible{opacity:1;transform:translateY(0)}
+.ing-card:hover{background:rgba(42,14,6,.8);border-left-color:var(--red2)}
+.ing-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.ing-icon{font-size:2.2rem;flex-shrink:0}
+.ing-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600;color:var(--panna);margin-bottom:.2rem}
+.ing-origin{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red2);opacity:.8}
+.ing-story{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;line-height:1.9;color:rgba(245,237,214,.65);margin-bottom:1.1rem}
+.ing-note{font-size:.82rem;line-height:1.7;color:rgba(245,237,214,.45);padding:.9rem 1rem;background:rgba(192,57,43,.07);border-left:2px solid rgba(192,57,43,.3)}
+.ing-note-label{font-weight:500;color:var(--red2);margin-right:.4rem}
+
+/* PAIRING STRIP */
+.pairing-strip{background:var(--bg2);border-top:1px solid rgba(192,57,43,.15);border-bottom:1px solid rgba(192,57,43,.15);padding:3rem 2rem;margin:0;text-align:center}
+.pairing-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;color:var(--panna);margin-bottom:.6rem}
+.pairing-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--grigio);line-height:1.85;max-width:680px;margin:0 auto 1.5rem}
+.pairing-tags{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
+.ptag{background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.25);color:var(--panna);font-size:.78rem;padding:.35rem .9rem;letter-spacing:.04em}
+
+
+footer{padding:3rem 2rem;border-top:1px solid rgba(255,255,255,.07)}
+.footer-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:.7rem}
+.footer-brand span{font-style:italic}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:.88rem;line-height:1.8;opacity:.5}
+.fcol-title{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.9rem;opacity:.6}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.footer-links a{text-decoration:none;font-size:.8rem;opacity:.4;transition:opacity .2s}
+.footer-links a:hover{opacity:.9}
+.footer-bottom{max-width:1000px;margin:2rem auto 0;padding-top:1.3rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;font-size:.7rem;opacity:.35}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr 1fr}}
+
+footer{color:var(--panna)}
+.footer-brand span{color:var(--red2)}
+.fcol-title{color:var(--red2) !important}
+
+@media(max-width:600px){.ingredients-section{padding:3rem 1.2rem}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Tuscany<span>Box</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#boxes">Le Box</a></li>
+    <li><a href="inferno.html" class="nav-inferno">🔥 Inferno</a></li>
+    <li><a href="purgatorio.html" class="nav-purgatorio">🌿 Purgatorio</a></li>
+    <li><a href="paradiso.html" class="nav-paradiso">☀️ Paradiso</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Torna al sito</a>
+</nav>
+
+<!-- EMBERS -->
+<canvas id="ember-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5"></canvas>
+
+<section class="hero">
+  <div class="hero-dante">Canto I · La Divina Commedia</div>
+  <h1 class="hero-title">Inferno<em>Box</em></h1>
+  <p class="hero-sub">Sapori intensi e carattere toscano — per chi non ha paura di andare in fondo al gusto.</p>
+  <div class="hero-quote">"Per me si va ne la città dolente, per me si va ne l'etterno dolore..."</div>
+  <a href="#ingredienti" class="btn-order">Scopri gli Ingredienti</a>
+</section>
+
+<div class="flame-divider">
+  <div class="flame-line"></div>
+  🔥
+  <div class="flame-line"></div>
+</div>
+
+<section class="ingredients-section" id="ingredienti">
+  <div class="ing-header-section">
+    <div class="ing-tag">7 Ingredienti Selezionati</div>
+    <h2 class="ing-section-title">Ogni prodotto, <em>una storia</em></h2>
+    <p class="ing-section-desc">Sette ingredienti toscani di eccellenza, scelti da Chef Gabe Bertaccini per la loro intensità, autenticità e carattere.</p>
+  </div>
+  <div class="ing-grid">
+
+<div class="ing-card" style="--delay:0s">
+  <div class="ing-header">
+    <span class="ing-icon">🌶️</span>
+    <div>
+      <div class="ing-name">Peperoncino Zenzerino di Siloe</div>
+      <div class="ing-origin">Siloe, Toscana</div>
+    </div>
+  </div>
+  <div class="ing-story">Varietà rarissima coltivata da un'unica famiglia contadina nei pressi di Siloe, nell'entroterra toscano. Il nome 'zenzerino' deriva dalle sue note aromatiche che ricordano lo zenzero fresco. Raccolto a mano in autunno, essiccato al sole e macinato a pietra. La sua piccantezza è intensa ma non aggressiva — un calore che avvolge e persiste. Fuori dalla Toscana è quasi impossibile trovarlo.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Aggiungi mezzo cucchiaino nell'olio caldo prima di iniziare qualsiasi sugo. Sul pecorino stagionato crea un contrasto straordinario.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.1s">
+  <div class="ing-header">
+    <span class="ing-icon">🍖</span>
+    <div>
+      <div class="ing-name">Ragù di Cinghiale</div>
+      <div class="ing-origin">Maremma Toscana</div>
+    </div>
+  </div>
+  <div class="ing-story">Il cinghiale è il protagonista indiscusso della cucina maremmana. Questo ragù viene preparato secondo la ricetta tradizionale: la carne viene marinata per 24 ore nel vino rosso con ginepro, alloro e rosmarino, poi brasata lentamente per ore fino a quando si sfalda naturalmente. Il risultato è un condimento ricco, scuro, profondamente saporito. Confezionato sottovuoto subito dopo la cottura per preservare ogni sfumatura di sapore.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Scalda a fuoco basso aggiungendo un mestolo di acqua di cottura della pasta. Finisci con un filo di olio EVO a crudo e abbondante pecorino grattugiato.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.2s">
+  <div class="ing-header">
+    <span class="ing-icon">🧀</span>
+    <div>
+      <div class="ing-name">Pecorino Toscano Stagionato</div>
+      <div class="ing-origin">Crete Senesi, Siena</div>
+    </div>
+  </div>
+  <div class="ing-story">Prodotto con latte intero di pecora delle Crete Senesi, questo pecorino viene stagionato almeno 120 giorni in cantine naturali. La crosta è dura e ambrata, la pasta compatta e leggermente granulosa, il sapore deciso con note di fieno, pascolo e nocciola tostata. È il formaggio che i contadini toscani portavano nei campi — nutrimento e piacere in un unico pezzo. Presidio delle tradizioni casearie senesi.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Servilo a temperatura ambiente, a scaglie grosse. Con miele di castagno o confettura di fichi è sublime. Grattugiato fresco sulla pasta al ragù è insostituibile.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.3s">
+  <div class="ing-header">
+    <span class="ing-icon">🫒</span>
+    <div>
+      <div class="ing-name">Olio EVO Toscano</div>
+      <div class="ing-origin">Colline Livornesi</div>
+    </div>
+  </div>
+  <div class="ing-story">Olio extravergine di oliva da cultivar toscane in purezza — Frantoio, Moraiolo e Leccino. Raccolta anticipata a mano, frangitura entro 24 ore dalla raccolta a freddo sotto i 27°C. Il colore è verde oro intenso, il profumo erbaceo e fresco, il sapore fruttato con finale leggermente piccante e amarognolo — segno di alta qualità e basso grado di acidità. Ogni bottiglia è numerata.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Usalo esclusivamente a crudo come 'condimento finale'. Un filo generoso sulla bruschetta calda, sulla ribollita o sulle pappardelle appena scolate trasforma il piatto.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.4s">
+  <div class="ing-header">
+    <span class="ing-icon">🍝</span>
+    <div>
+      <div class="ing-name">Pappardelle Artigianali</div>
+      <div class="ing-origin">Laboratorio Artigianale, Firenze</div>
+    </div>
+  </div>
+  <div class="ing-story">Le pappardelle sono il formato di pasta tradizionale toscano per eccellenza — larghe, piatte, ruvide. Queste vengono realizzate con semola di grano duro e uova fresche di galline allevate a terra, trafilate al bronzo (per una superficie porosa che trattiene il condimento), essiccate lentamente a bassa temperatura per 36 ore. Il risultato è una pasta che mantiene la cottura perfettamente e sposa il ragù di cinghiale in modo insuperabile.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Cuoci in abbondante acqua salata, scolale al dente. Mantecale direttamente in padella con il ragù caldo e un mestolo di acqua di cottura.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.5s">
+  <div class="ing-header">
+    <span class="ing-icon">🧂</span>
+    <div>
+      <div class="ing-name">Sale Aromatico Toscano</div>
+      <div class="ing-origin">Saline di Volterra, Pisa</div>
+    </div>
+  </div>
+  <div class="ing-story">Sale marino integrale delle saline volterrane, mescolato a mano con un blend di erbe aromatiche toscane selvatiche: rosmarino, salvia, timo, aglio e pepe nero. Le erbe vengono essiccate all'ombra per mantenere gli oli essenziali, poi macinate grossolanamente e miscelate con il sale in proporzione tradizionale. Profumo intenso e complesso, sapidità equilibrata.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Usalo per condire bruschette, carni alla griglia, verdure arrosto. Un pizzico sulla pasta al burro è rivelatorio. Conservalo in barattolo chiuso lontano dall'umidità.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.6s">
+  <div class="ing-header">
+    <span class="ing-icon">🍷</span>
+    <div>
+      <div class="ing-name">Vino Rosso — Chianti o Morellino</div>
+      <div class="ing-origin">Chianti / Maremma, Toscana</div>
+    </div>
+  </div>
+  <div class="ing-story">Un Sangiovese toscano selezionato tra due delle denominazioni più iconiche della regione: Chianti DOCG o Morellino di Scansano DOC. Entrambi espressione del Sangiovese toscano — vitigno che ha fatto la storia del vino italiano. Rubino intenso, profumi di ciliegia, marasca e spezie, struttura tannica elegante, finale lungo e persistente. Perfetto compagno dei sapori forti e decisi dell'Inferno.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Servi a 16-18°C. Stappa 30 minuti prima di portarlo in tavola. Abbina al ragù di cinghiale, al pecorino stagionato e alla bruschetta con sale aromatico.</div>
+</div>
+  </div>
+</section>
+
+<div class="pairing-strip">
+  <h3 class="pairing-title">La ricetta di Chef Gabe</h3>
+  <p class="pairing-text">Cuoci le Pappardelle in abbondante acqua salata. Nel frattempo scalda il Ragù di Cinghiale con mezzo bicchiere di vino rosso e un pizzico di Peperoncino Zenzerino. Scola la pasta al dente, mantecala nel ragù con acqua di cottura. Servi con abbondante Pecorino grattugiato, un filo di Olio EVO a crudo e un calice di Morellino di Scansano.</p>
+  <div class="pairing-tags">
+    <span class="ptag">🍷 Morellino di Scansano</span>
+    <span class="ptag">🥖 Pane toscano sciocco</span>
+    <span class="ptag">🌶️ Peperoncino a crudo</span>
+    <span class="ptag">🧀 Pecorino grattugiato</span>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Tuscany<span>Box</span></div>
+      <p class="footer-tagline">Portare i sapori autentici della Toscana sulle tavole di tutto il mondo.</p>
+    </div>
+    <div><div class="fcol-title">Le Box</div><ul class="footer-links">
+      <li><a href="inferno.html">🔥 Inferno</a></li>
+      <li><a href="purgatorio.html">🌿 Purgatorio</a></li>
+      <li><a href="paradiso.html">☀️ Paradiso</a></li>
+    </ul></div>
+    <div><div class="fcol-title">Sito</div><ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#chef">Chef Gabe</a></li>
+      <li><a href="index.html#how">Come Funziona</a></li>
+    </ul></div>
+    <div><div class="fcol-title">Contatti</div><ul class="footer-links">
+      <li><a href="#">info@tuscanybox.com</a></li>
+      <li><a href="#">Firenze, Italy 🇮🇹</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Tuscany Box · In partnership with Chef Gabe Bertaccini</span>
+    <span><a href="index.html" style="color:inherit">← Torna alla home</a></span>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').style.background = window.scrollY>60 ? 'rgba(13,4,2,.97)' : 'rgba(13,4,2,.88)';
+});
+
+// scroll reveal
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible')});
+},{threshold:.1});
+document.querySelectorAll('.ing-card').forEach(el=>observer.observe(el));
+
+// ember canvas
+const canvas = document.getElementById('ember-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight});
+const embers = Array.from({length:35},()=>({
+  x:Math.random()*canvas.width, y:canvas.height+20,
+  r:Math.random()*2+1, speed:Math.random()*1.2+.4,
+  drift:Math.random()*.8-.4, opacity:Math.random()*.6+.2,
+  hue:Math.floor(Math.random()*30)
+}));
+function animEmbers(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  embers.forEach(e=>{
+    e.y -= e.speed; e.x += e.drift;
+    if(e.y < -10){e.y=canvas.height+10;e.x=Math.random()*canvas.width}
+    ctx.beginPath();
+    ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${15+e.hue},90%,60%,${e.opacity})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(animEmbers);
+}
+animEmbers();
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuscany Box — Purgatorio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0810;--bg2:#130F1A;--bg3:#1C1526;
+  --purple:#7B5EA7;--purple2:#9B7EC7;--purple-dim:#4A3570;
+  --gold:#C8860A;--panna:#F0EBF8;--grigio:#8A80A0;
+  --bianco:#FAF7FF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--panna);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);transition:all .4s}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;letter-spacing:-.02em;text-decoration:none}
+.nav-logo span{font-style:italic}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{text-decoration:none;font-size:.72rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;transition:color .3s;opacity:.7}
+.nav-links a:hover{opacity:1}
+.nav-back{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;opacity:.55;transition:opacity .3s;padding:.45rem .9rem;border:1px solid currentColor;font-family:'Jost',sans-serif}
+.nav-back:hover{opacity:1}
+@media(max-width:700px){.nav-links{display:none}}
+
+nav{background:rgba(12,8,16,.88);color:var(--panna)}
+.nav-logo{color:var(--panna)}.nav-logo span{color:var(--purple2)}
+.nav-links a{color:var(--panna)}.nav-links a:hover{color:var(--purple2)}
+.nav-back{color:var(--panna)}
+
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 2rem 5rem;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(123,94,167,.14) 0%,transparent 70%),
+             radial-gradient(ellipse 100% 40% at 50% 100%,rgba(80,50,130,.2) 0%,transparent 60%),
+             linear-gradient(180deg,var(--bg) 0%,var(--bg2) 60%,var(--bg3) 100%);
+}
+/* floating mist */
+.mist{position:absolute;border-radius:50%;pointer-events:none;animation:drift ease-in-out infinite;background:radial-gradient(ellipse,rgba(123,94,167,.08),transparent)}
+@keyframes drift{0%,100%{transform:translateX(0) translateY(0)}33%{transform:translateX(30px) translateY(-20px)}66%{transform:translateX(-20px) translateY(15px)}}
+.hero-dante{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-style:italic;color:rgba(155,126,199,.7);letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .1s ease forwards}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3rem,9vw,8rem);line-height:.95;font-weight:700;color:var(--panna);opacity:0;animation:fadeUp .9s .2s ease forwards;letter-spacing:-.02em}
+.hero-title em{font-style:italic;color:var(--purple2);display:block;font-size:.5em}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;line-height:1.9;color:var(--grigio);max-width:520px;margin:1.5rem auto 2.5rem;opacity:0;animation:fadeUp .9s .35s ease forwards}
+.hero-quote{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:rgba(123,94,167,.6);margin-bottom:2.5rem;opacity:0;animation:fadeUp .9s .5s ease forwards}
+.btn-order{background:var(--purple);color:var(--panna);border:none;padding:1rem 2.8rem;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .35s;text-decoration:none;display:inline-block;opacity:0;animation:fadeUp .9s .65s ease forwards}
+.btn-order:hover{background:var(--purple2);transform:translateY(-3px);box-shadow:0 12px 30px rgba(123,94,167,.4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.divider{display:flex;align-items:center;justify-content:center;gap:1rem;padding:2rem;font-size:1.4rem;opacity:.4}
+.div-line{flex:1;max-width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--purple-dim),transparent)}
+.ingredients-section{max-width:1000px;margin:0 auto;padding:4rem 2rem 6rem}
+.ing-header-section{text-align:center;margin-bottom:3rem}
+.ing-tag{font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--purple2);font-weight:500;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:.8rem}
+.ing-tag::before,.ing-tag::after{content:'';width:24px;height:1px;background:var(--purple-dim);display:block}
+.ing-section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:var(--panna);line-height:1.15}
+.ing-section-title em{font-style:italic;color:var(--purple2)}
+.ing-section-desc{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--grigio);margin-top:.8rem;font-weight:300;line-height:1.8}
+.ing-grid{display:flex;flex-direction:column;gap:1.2rem}
+.ing-card{background:rgba(19,15,26,.7);border:1px solid rgba(123,94,167,.15);border-left:3px solid var(--purple);padding:1.8rem 2rem;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease,border-color .3s,background .3s;transition-delay:var(--delay)}
+.ing-card.visible{opacity:1;transform:translateY(0)}
+.ing-card:hover{background:rgba(28,21,38,.8);border-left-color:var(--purple2)}
+.ing-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.ing-icon{font-size:2.2rem;flex-shrink:0}
+.ing-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600;color:var(--panna);margin-bottom:.2rem}
+.ing-origin{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--purple2);opacity:.8}
+.ing-story{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;line-height:1.9;color:rgba(240,235,248,.62);margin-bottom:1.1rem}
+.ing-note{font-size:.82rem;line-height:1.7;color:rgba(240,235,248,.42);padding:.9rem 1rem;background:rgba(123,94,167,.07);border-left:2px solid rgba(123,94,167,.3)}
+.ing-note-label{font-weight:500;color:var(--purple2);margin-right:.4rem}
+.pairing-strip{background:var(--bg2);border-top:1px solid rgba(123,94,167,.15);border-bottom:1px solid rgba(123,94,167,.15);padding:3rem 2rem;text-align:center}
+.pairing-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;color:var(--panna);margin-bottom:.6rem}
+.pairing-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--grigio);line-height:1.85;max-width:680px;margin:0 auto 1.5rem}
+.pairing-tags{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
+.ptag{background:rgba(123,94,167,.12);border:1px solid rgba(123,94,167,.25);color:var(--panna);font-size:.78rem;padding:.35rem .9rem}
+
+footer{padding:3rem 2rem;border-top:1px solid rgba(255,255,255,.07)}
+.footer-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:.7rem}
+.footer-brand span{font-style:italic}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:.88rem;line-height:1.8;opacity:.5}
+.fcol-title{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.9rem;opacity:.6}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.footer-links a{text-decoration:none;font-size:.8rem;opacity:.4;transition:opacity .2s}
+.footer-links a:hover{opacity:.9}
+.footer-bottom{max-width:1000px;margin:2rem auto 0;padding-top:1.3rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;font-size:.7rem;opacity:.35}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr 1fr}}
+
+footer{color:var(--panna)}.footer-brand span{color:var(--purple2)}.fcol-title{color:var(--purple2) !important}
+@media(max-width:600px){.ingredients-section{padding:3rem 1.2rem}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--purple);border-radius:2px}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Tuscany<span>Box</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#boxes">Le Box</a></li>
+    <li><a href="inferno.html" class="nav-inferno">🔥 Inferno</a></li>
+    <li><a href="purgatorio.html" class="nav-purgatorio">🌿 Purgatorio</a></li>
+    <li><a href="paradiso.html" class="nav-paradiso">☀️ Paradiso</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Torna al sito</a>
+</nav>
+<!-- MIST -->
+<div class="mist" style="width:600px;height:400px;top:10%;left:-10%;animation-duration:18s"></div>
+<div class="mist" style="width:400px;height:300px;top:40%;right:-5%;animation-duration:14s;animation-delay:-7s"></div>
+<div class="mist" style="width:500px;height:350px;bottom:20%;left:30%;animation-duration:22s;animation-delay:-11s"></div>
+<section class="hero">
+  <div class="hero-dante">Canto II · La Divina Commedia</div>
+  <h1 class="hero-title">Purgatorio<em>Box</em></h1>
+  <p class="hero-sub">Il cammino di purificazione attraverso i sapori più raffinati e profondi della Toscana.</p>
+  <div class="hero-quote">"Purgatorio è il luogo dove l'anima si affina — come i sapori che, con pazienza, diventano sublimi."</div>
+  <a href="#ingredienti" class="btn-order">Scopri gli Ingredienti</a>
+</section>
+<div class="divider"><div class="div-line"></div>🌿<div class="div-line"></div></div>
+<section class="ingredients-section" id="ingredienti">
+  <div class="ing-header-section">
+    <div class="ing-tag">8 Ingredienti Selezionati</div>
+    <h2 class="ing-section-title">Ogni prodotto, <em>un'anima</em></h2>
+    <p class="ing-section-desc">Otto ingredienti di rara eleganza, scelti da Chef Gabe per il loro carattere raffinato e la loro profondità aromatica.</p>
+  </div>
+  <div class="ing-grid">
+
+<div class="ing-card" style="--delay:0s">
+  <div class="ing-header">
+    <span class="ing-icon">🍄</span>
+    <div>
+      <div class="ing-name">Crema di Tartufo Nero</div>
+      <div class="ing-origin">Foreste dell'Amiata, Grosseto</div>
+    </div>
+  </div>
+  <div class="ing-story">Il tartufo nero estivo (Tuber aestivum Vitt.) cresce spontaneamente nelle foreste di querce e noccioli delle colline amiatine. Raccolto da trifolai esperti con l'aiuto di cani addestrati, viene lavorato entro poche ore dalla raccolta. La crema è preparata con tartufo fresco tritato, olio extravergine, un tocco di acciuga e sale — niente aromi artificiali, niente conservanti. Aroma intenso, terroso, inconfondibile.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Due cucchiai sono sufficienti per condire 200g di pasta. Scalda appena con burro di qualità, mai friggere. Finisci con olio EVO a crudo e Pecorino al Vino grattugiato.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.1s">
+  <div class="ing-header">
+    <span class="ing-icon">🍝</span>
+    <div>
+      <div class="ing-name">Tagliolini all'Uovo</div>
+      <div class="ing-origin">Pasta Artigianale, Siena</div>
+    </div>
+  </div>
+  <div class="ing-story">I tagliolini sono la pasta dell'eleganza toscana — sottili, delicati, quasi trasparenti. Realizzati con semola di grano duro di varietà antica (Senatore Cappelli) e uova fresche di galline allevate a terra. Trafilati al bronzo per una superficie vellutata che cattura ogni sfumatura del condimento al tartufo. Essiccati lentamente per 48 ore. Il formato perfetto per valorizzare il tartufo senza sovrastarlo.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Cuoci in acqua salata per 2-3 minuti. L'acqua di cottura è fondamentale: conservane un mestolo per mantecare la pasta con la crema di tartufo.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.2s">
+  <div class="ing-header">
+    <span class="ing-icon">🧀</span>
+    <div>
+      <div class="ing-name">Pecorino al Vino</div>
+      <div class="ing-origin">Cantina Cooperativa, Montalcino</div>
+    </div>
+  </div>
+  <div class="ing-story">Un pecorino toscano a stagionatura media — circa 60 giorni — che subisce un trattamento speciale: le forme vengono immerse in vinacce fresche di Brunello di Montalcino per 15-20 giorni. La crosta diventa viola-nera, profumata e leggermente tannica. La pasta rimane morbida e cremosa, con note dolci di latte fresco e un sottofondo vinoso elegante e persistente. Raro, stagionale, da assaporare lentamente.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Servi a fette spesse a temperatura ambiente. Con miele di castagno è una combinazione straordinaria. Grattugiato freschissimo sulla pasta al tartufo aggiunge complessità senza sovrastare.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.3s">
+  <div class="ing-header">
+    <span class="ing-icon">🍯</span>
+    <div>
+      <div class="ing-name">Miele di Castagno</div>
+      <div class="ing-origin">Boschi dell'Amiata, Grosseto</div>
+    </div>
+  </div>
+  <div class="ing-story">Prodotto dai castagni selvatici delle pendici del Monte Amiata in tarda estate. Il miele di castagno è il più caratteristico e divisivo dei mieli italiani: colore ambra scuro quasi opaco, aroma intenso e leggermente fumé, sapore amaro e persistente con un finale lunghissimo. Non cristallizza facilmente. È considerato un 'miele da meditazione' — va assaporato lentamente, in piccole quantità, come si fa con un distillato di pregio.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> La combinazione con il Pecorino al Vino è sorprendente: l'amaro del castagno bilancia la dolcezza del latte e le note vinose. Un cucchiaino sul formaggio, un sorso di Vin Santo — il Purgatorio ha il suo senso.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.4s">
+  <div class="ing-header">
+    <span class="ing-icon">🫙</span>
+    <div>
+      <div class="ing-name">Confettura di Fichi Toscani</div>
+      <div class="ing-origin">Fattoria Artigianale, Livorno</div>
+    </div>
+  </div>
+  <div class="ing-story">Fichi di varietà locale — Dottato e Brogiotto — raccolti maturi dal giardino di una piccola fattoria livornese in agosto. La confettura viene cotta in piccoli lotti con poca zucchero di canna e succo di limone, senza pectina aggiunta. Il risultato è una composta densa, profumata, con pezzi visibili di fico e semi croccanti. Produzione limitata a pochi vasetti per stagione — quello che rimane del raccolto annuale.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Spalma sul Pecorino al Vino per un antipasto elegante. Eccellente anche su bruschetta con ricotta fresca. Abbinata ai Cantucci e al Vin Santo chiude il cerchio della tradizione toscana.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.5s">
+  <div class="ing-header">
+    <span class="ing-icon">🫒</span>
+    <div>
+      <div class="ing-name">Olio EVO Toscano</div>
+      <div class="ing-origin">Frantoio Artigianale, Lucca</div>
+    </div>
+  </div>
+  <div class="ing-story">Olio extravergine monocultivar Frantoio dalla zona di Lucca — una delle più antiche zone olivicole d'Italia. Frangitura a ciclo continuo a freddo entro 12 ore dalla raccolta. Filtrazione delicata a gravità. Il risultato è un olio verde smeraldo nel primo mese, poi dorato con riflessi verdi, dal profumo erbaceo e di pomodoro verde, sapore fruttato di media intensità con finale moderatamente piccante. Acidità inferiore allo 0,2%.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Su questa box è il filo conduttore: sulla pasta al tartufo, sul pecorino, sulla bruschetta per accompagnare i cantucci. Usarlo a crudo sempre — il calore distrugge i polifenoli e i profumi delicati.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.6s">
+  <div class="ing-header">
+    <span class="ing-icon">🍪</span>
+    <div>
+      <div class="ing-name">Cantucci di Prato</div>
+      <div class="ing-origin">Biscottificio Artigianale, Prato</div>
+    </div>
+  </div>
+  <div class="ing-story">I cantucci — o biscotti di Prato — sono uno dei dolci più antichi della Toscana. La ricetta originale del biscottificio Mattei risale al 1858: farina, zucchero, uova, mandorle intere non pelate di Avola, scorza d'arancia. Niente burro, niente lievito. L'impasto viene modellato in filoni, cotto, tagliato in diagonale e ricotto — da qui la caratteristica durezza che li rende perfetti per l'inzuppo nel Vin Santo.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> La tradizione vuole che si inzuppino nel Vin Santo tenendoli immersi qualche secondo. L'abbinamento Cantucci-Vin Santo è inscindibile — uno senza l'altro perde senso.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.7s">
+  <div class="ing-header">
+    <span class="ing-icon">🍶</span>
+    <div>
+      <div class="ing-name">Vin Santo del Chianti</div>
+      <div class="ing-origin">Fattoria Storica, Greve in Chianti</div>
+    </div>
+  </div>
+  <div class="ing-story">Il Vin Santo è l'anima dolce della Toscana. Uve Trebbiano e Malvasia vengono messe ad appassire su graticci di bambù in locali ventilati ('fruttai') da settembre a gennaio. Poi pigiate e il mosto viene messo in piccole botti di castagno o rovere ('caratelli') sigillate, lasciate a fermentare e affinare per almeno 3 anni in soffitta, esposte alle variazioni termiche stagionali. Colore ambra profondo, profumo di fico secco, albicocca e miele, sapore dolce con acidità vivace.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Servi a 10-12°C in piccoli bicchieri da dessert. Il rituale toscano è semplice e sacro: un bicchiere di Vin Santo, una manciata di Cantucci, buona compagnia.</div>
+</div>
+  </div>
+</section>
+<div class="pairing-strip">
+  <h3 class="pairing-title">La ricetta di Chef Gabe</h3>
+  <p class="pairing-text">Porta l'acqua a bollore, sala generosamente. Cuoci i Tagliolini 2-3 minuti. Nel frattempo scioglie 30g di burro in padella con un cucchiaio di acqua di cottura calda — non friggere mai il tartufo. Aggiungi 2 cucchiai di Crema di Tartufo, mescola. Scola i Tagliolini, mantecali delicatamente. Servi con Pecorino al Vino grattugiato e un filo di Olio EVO. Termina con Cantucci e Vin Santo.</p>
+  <div class="pairing-tags">
+    <span class="ptag">🍶 Vin Santo del Chianti</span>
+    <span class="ptag">🍪 Cantucci di Prato</span>
+    <span class="ptag">🧀 Pecorino al Vino</span>
+    <span class="ptag">🍯 Miele di Castagno</span>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Tuscany<span>Box</span></div>
+      <p class="footer-tagline">Portare i sapori autentici della Toscana sulle tavole di tutto il mondo.</p>
+    </div>
+    <div><div class="fcol-title">Le Box</div><ul class="footer-links">
+      <li><a href="inferno.html">🔥 Inferno</a></li>
+      <li><a href="purgatorio.html">🌿 Purgatorio</a></li>
+      <li><a href="paradiso.html">☀️ Paradiso</a></li>
+    </ul></div>
+    <div><div class="fcol-title">Sito</div><ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#chef">Chef Gabe</a></li>
+      <li><a href="index.html#how">Come Funziona</a></li>
+    </ul></div>
+    <div><div class="fcol-title">Contatti</div><ul class="footer-links">
+      <li><a href="#">info@tuscanybox.com</a></li>
+      <li><a href="#">Firenze, Italy 🇮🇹</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Tuscany Box · In partnership with Chef Gabe Bertaccini</span>
+    <span><a href="index.html" style="color:inherit">← Torna alla home</a></span>
+  </div>
+</footer>
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').style.background=window.scrollY>60?'rgba(12,8,16,.97)':'rgba(12,8,16,.88)';
+});
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1});
+document.querySelectorAll('.ing-card').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuscany Box — Paradiso</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03080F;--bg2:#060E18;--bg3:#0A1520;
+  --blue:#2E86AB;--blue2:#5BA8C8;--blue-dim:#1A4A6B;
+  --gold:#C8A840;--panna:#EEF4F8;--grigio:#7E9AAA;
+  --bianco:#F5FAFE;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--panna);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1rem 2.5rem;backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.08);transition:all .4s}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;letter-spacing:-.02em;text-decoration:none}
+.nav-logo span{font-style:italic}
+.nav-links{display:flex;gap:1.8rem;list-style:none}
+.nav-links a{text-decoration:none;font-size:.72rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;transition:color .3s;opacity:.7}
+.nav-links a:hover{opacity:1}
+.nav-back{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;opacity:.55;transition:opacity .3s;padding:.45rem .9rem;border:1px solid currentColor;font-family:'Jost',sans-serif}
+.nav-back:hover{opacity:1}
+@media(max-width:700px){.nav-links{display:none}}
+
+nav{background:rgba(3,8,15,.88);color:var(--panna)}
+.nav-logo{color:var(--panna)}.nav-logo span{color:var(--gold)}
+.nav-links a{color:var(--panna)}.nav-links a:hover{color:var(--gold)}
+.nav-back{color:var(--panna)}
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 2rem 5rem;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(46,134,171,.12) 0%,transparent 70%),
+             radial-gradient(ellipse 100% 40% at 50% 0%,rgba(200,168,64,.08) 0%,transparent 50%),
+             linear-gradient(180deg,var(--bg) 0%,var(--bg2) 60%,var(--bg3) 100%);
+}
+/* stars */
+#star-canvas{position:absolute;inset:0;pointer-events:none}
+.hero-dante{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-style:italic;color:rgba(91,168,200,.7);letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .1s ease forwards}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,9vw,8.5rem);line-height:.95;font-weight:700;color:var(--panna);opacity:0;animation:fadeUp .9s .2s ease forwards;letter-spacing:-.02em}
+.hero-title em{font-style:italic;color:var(--gold);display:block;font-size:.48em}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:300;line-height:1.9;color:var(--grigio);max-width:520px;margin:1.5rem auto 2.5rem;opacity:0;animation:fadeUp .9s .35s ease forwards}
+.hero-quote{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:rgba(200,168,64,.55);margin-bottom:2.5rem;opacity:0;animation:fadeUp .9s .5s ease forwards}
+.btn-order{background:var(--blue);color:var(--panna);border:none;padding:1rem 2.8rem;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .35s;text-decoration:none;display:inline-block;opacity:0;animation:fadeUp .9s .65s ease forwards}
+.btn-order:hover{background:var(--blue2);transform:translateY(-3px);box-shadow:0 12px 30px rgba(46,134,171,.4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.divider{display:flex;align-items:center;justify-content:center;gap:1rem;padding:2rem;font-size:1.4rem;opacity:.4}
+.div-line{flex:1;max-width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--blue-dim),transparent)}
+.ingredients-section{max-width:1000px;margin:0 auto;padding:4rem 2rem 6rem}
+.ing-header-section{text-align:center;margin-bottom:3rem}
+.ing-tag{font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:.8rem}
+.ing-tag::before,.ing-tag::after{content:'';width:24px;height:1px;background:var(--blue-dim);display:block}
+.ing-section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:600;color:var(--panna);line-height:1.15}
+.ing-section-title em{font-style:italic;color:var(--gold)}
+.ing-section-desc{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--grigio);margin-top:.8rem;font-weight:300;line-height:1.8}
+.ing-grid{display:flex;flex-direction:column;gap:1.2rem}
+.ing-card{background:rgba(6,14,24,.7);border:1px solid rgba(46,134,171,.15);border-left:3px solid var(--blue);padding:1.8rem 2rem;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease,border-color .3s,background .3s;transition-delay:var(--delay)}
+.ing-card.visible{opacity:1;transform:translateY(0)}
+.ing-card:hover{background:rgba(10,21,32,.8);border-left-color:var(--gold)}
+.ing-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.ing-icon{font-size:2.2rem;flex-shrink:0}
+.ing-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600;color:var(--panna);margin-bottom:.2rem}
+.ing-origin{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);opacity:.8}
+.ing-story{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;line-height:1.9;color:rgba(238,244,248,.62);margin-bottom:1.1rem}
+.ing-note{font-size:.82rem;line-height:1.7;color:rgba(238,244,248,.42);padding:.9rem 1rem;background:rgba(46,134,171,.07);border-left:2px solid rgba(46,134,171,.3)}
+.ing-note-label{font-weight:500;color:var(--gold);margin-right:.4rem}
+.pairing-strip{background:var(--bg2);border-top:1px solid rgba(46,134,171,.15);border-bottom:1px solid rgba(46,134,171,.15);padding:3rem 2rem;text-align:center}
+.pairing-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;color:var(--panna);margin-bottom:.6rem}
+.pairing-text{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--grigio);line-height:1.85;max-width:680px;margin:0 auto 1.5rem}
+.pairing-tags{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center}
+.ptag{background:rgba(46,134,171,.12);border:1px solid rgba(46,134,171,.25);color:var(--panna);font-size:.78rem;padding:.35rem .9rem}
+
+footer{padding:3rem 2rem;border-top:1px solid rgba(255,255,255,.07)}
+.footer-inner{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:.7rem}
+.footer-brand span{font-style:italic}
+.footer-tagline{font-family:'Cormorant Garamond',serif;font-size:.88rem;line-height:1.8;opacity:.5}
+.fcol-title{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.9rem;opacity:.6}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.footer-links a{text-decoration:none;font-size:.8rem;opacity:.4;transition:opacity .2s}
+.footer-links a:hover{opacity:.9}
+.footer-bottom{max-width:1000px;margin:2rem auto 0;padding-top:1.3rem;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;font-size:.7rem;opacity:.35}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr 1fr}}
+
+footer{color:var(--panna)}.footer-brand span{color:var(--gold)}.fcol-title{color:var(--gold) !important}
+@media(max-width:600px){.ingredients-section{padding:3rem 1.2rem}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Tuscany<span>Box</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#boxes">Le Box</a></li>
+    <li><a href="inferno.html" class="nav-inferno">🔥 Inferno</a></li>
+    <li><a href="purgatorio.html" class="nav-purgatorio">🌿 Purgatorio</a></li>
+    <li><a href="paradiso.html" class="nav-paradiso">☀️ Paradiso</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Torna al sito</a>
+</nav>
+<canvas id="star-canvas"></canvas>
+<section class="hero">
+  <div class="hero-dante">Canto III · La Divina Commedia</div>
+  <h1 class="hero-title">Paradiso<em>Box</em></h1>
+  <p class="hero-sub">La semplicità elevata a perfezione — la cucina toscana nella sua forma più pura e genuina.</p>
+  <div class="hero-quote">"L'amor che move il sole e l'altre stelle." — Dante Alighieri</div>
+  <a href="#ingredienti" class="btn-order">Scopri gli Ingredienti</a>
+</section>
+<div class="divider"><div class="div-line"></div>☀️<div class="div-line"></div></div>
+<section class="ingredients-section" id="ingredienti">
+  <div class="ing-header-section">
+    <div class="ing-tag">8 Ingredienti Selezionati</div>
+    <h2 class="ing-section-title">Ogni prodotto, <em>una luce</em></h2>
+    <p class="ing-section-desc">Otto ingredienti che celebrano la semplicità e la genuinità della cucina toscana di campagna — la più autentica e la più amata.</p>
+  </div>
+  <div class="ing-grid">
+
+<div class="ing-card" style="--delay:0s">
+  <div class="ing-header">
+    <span class="ing-icon">🍲</span>
+    <div>
+      <div class="ing-name">Ribollita in Vasetto</div>
+      <div class="ing-origin">Fattoria Artigianale, Firenze</div>
+    </div>
+  </div>
+  <div class="ing-story">La ribollita è la zuppa toscana per antonomasia — nata dalla necessità contadina di non sprecare nulla. Il suo nome deriva dal fatto che veniva 'ribollita' il giorno dopo, migliorando con il riposo. La versione in vasetto è preparata seguendo la ricetta della tradizione fiorentina: cavolo nero dell'Arno, fagioli cannellini, carote, sedano, cipolla rossa, pane raffermo toscano (senza sale), pomodoro e olio EVO. Cotta per ore a fuoco lentissimo. Pastorizzata e confezionata sottovuoto senza conservanti.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Scalda a fuoco bassissimo aggiungendo poco brodo o acqua. Non bollire. Prima di servire, versa un filo generoso di Olio EVO a crudo — è la 'firma' della ribollita toscana. Con il cavolo nero croccante in padella è straordinaria.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.1s">
+  <div class="ing-header">
+    <span class="ing-icon">🫘</span>
+    <div>
+      <div class="ing-name">Fagioli Zolfini del Pratomagno</div>
+      <div class="ing-origin">Pratomagno, Arezzo</div>
+    </div>
+  </div>
+  <div class="ing-story">I fagioli Zolfini sono uno dei Presìdi Slow Food più preziosi d'Italia. Piccoli, rotondi, di colore giallo pallido (da cui il nome, che richiama lo zolfo), vengono coltivati da pochissime famiglie sulle colline del Pratomagno tra i 300 e i 700 metri di altitudine. La buccia è talmente sottile che quasi non si percepisce in bocca. Il sapore è burroso, delicato, con una dolcezza naturale unica. Scomparsi quasi del tutto negli anni '70, oggi sono tornati grazie a piccoli coltivatori custodi.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Lessali lentamente in acqua non salata con salvia e un filo di olio (mai bollire forte — romperesti la buccia). Servi con abbondante Olio EVO, sale aromatico e un filo di aceto di vino rosso. Oppure ripassali in padella con la Salsa al Pomodoro.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.2s">
+  <div class="ing-header">
+    <span class="ing-icon">🍅</span>
+    <div>
+      <div class="ing-name">Salsa al Pomodoro</div>
+      <div class="ing-origin">Orto Biologico, Empoli</div>
+    </div>
+  </div>
+  <div class="ing-story">Passata di pomodori San Marzano e cuore di bue coltivati biologicamente nelle campagne empolesi. Raccolta a mano all'apice della maturazione in agosto, lavorata entro 4 ore dalla raccolta. Cotta brevemente con basilico fresco, aglio e olio EVO — nient'altro. Il risultato è una salsa di colore rosso vivo, profumo intenso di pomodoro maturo e basilico, dolcezza naturale e acidità equilibrata. Senza conservanti, senza addensanti, senza zucchero aggiunto.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Ottima così com'è su spaghetti con un filo di olio a crudo. Perfetta per ripassare i Fagioli Zolfini. Sulla bruschetta tostata con aglio, dopo una notte in frigorifero, diventa una pomarola straordinaria.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.3s">
+  <div class="ing-header">
+    <span class="ing-icon">🥩</span>
+    <div>
+      <div class="ing-name">Salame Toscano</div>
+      <div class="ing-origin">Norcineria Artigianale, Siena</div>
+    </div>
+  </div>
+  <div class="ing-story">Il salame toscano è inconfondibile: macinatura grossolana, con pezzi di grasso ben visibili e distribuiti, impasto condito con pepe nero in grani, aglio, sale marino e vino rosso toscano. Insaccato in budello naturale, legato a mano e stagionato per almeno 60 giorni in cantine con umidità e temperatura controllate. La consistenza è compatta ma cedevole, il sapore pieno e saporito con la caratteristica nota pepata e il profumo del vino. Pezzo intero sotto vuoto.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Affettalo sottile con un coltello affilato a temperatura ambiente. Sul pane toscano sciocco è il classico antipasto toscano. Abbinato al Pecorino Toscano e alla Marmellata crea il perfetto tagliere della tradizione.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.4s">
+  <div class="ing-header">
+    <span class="ing-icon">🧀</span>
+    <div>
+      <div class="ing-name">Pecorino Toscano DOP</div>
+      <div class="ing-origin">Cooperativa Casearia, Pienza</div>
+    </div>
+  </div>
+  <div class="ing-story">Il Pecorino Toscano DOP a stagionatura media — tra i 20 e i 60 giorni — è il formaggio più versatile e amato della tradizione toscana. Latte intero di pecora di razza Sarda e Massese, caglio naturale, salamoia di sale marino. La pasta è bianca, morbida ed elastica, il sapore dolce e latteo con leggero retrogusto di pascolo aromatico. La crosta è sottile e cerata. Completamente diverso dal pecorino stagionato — è freschezza e delicatezza.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Servilo come secondo o fine pasto con la Marmellata artigianale e un filo di Olio EVO. Sul pane con Salsa al Pomodoro è la 'merenda del contadino' toscana. Abbinato al vino rosso è classico e insuperabile.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.5s">
+  <div class="ing-header">
+    <span class="ing-icon">🫒</span>
+    <div>
+      <div class="ing-name">Olio EVO Toscano</div>
+      <div class="ing-origin">Frantoio di Famiglia, Lucignano</div>
+    </div>
+  </div>
+  <div class="ing-story">Olio extravergine ottenuto da olive Moraiolo in prevalenza, raccolte a mano a inizio ottobre — prima della piena maturazione, per massimizzare polifenoli e aromi. Il frantoio di famiglia Lucignano lavora le olive con molazza in granito e gramola tradizionale, poi estrae con centrifuga a temperatura controllata. L'olio è denso, verde smeraldo brillante nel primo mese, ricco di aromi vegetali: erba tagliata, carciofo, mandorla verde. Conservato in acciaio inox senza ossidazione.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Questo olio è nato per la ribollita e i fagioli — versane generosamente a crudo sui legumi caldi. È anche il condimento per eccellenza del pane toscano: olio, sale grosso, nient'altro.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.6s">
+  <div class="ing-header">
+    <span class="ing-icon">🍓</span>
+    <div>
+      <div class="ing-name">Marmellata Artigianale</div>
+      <div class="ing-origin">Laboratorio di Conserve, Arezzo</div>
+    </div>
+  </div>
+  <div class="ing-story">Marmellata di frutta toscana di stagione — la varietà dipende dal periodo di produzione: prugne selvatiche in agosto, fichi in settembre, more di rovo in luglio, arance bionde in inverno. Ogni lotto è diverso e rispecchia il momento dell'anno. Preparata con frutta intera o a pezzi, zucchero di canna integrale nella proporzione minima necessaria (60% frutta, 40% zucchero), succo di limone biologico. Cotta in piccoli lotti in pentola di rame. Etichettata a mano con varietà e data di produzione.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Abbinata al Salame Toscano e al Pecorino DOP su un tagliere è la quintessenza dell'antipasto toscano. Sul pane tostato a colazione con burro è semplicemente perfetta. Con il Pecorino a fine pasto, al posto del dolce.</div>
+</div>
+
+<div class="ing-card" style="--delay:0.7s">
+  <div class="ing-header">
+    <span class="ing-icon">🍷</span>
+    <div>
+      <div class="ing-name">Vino Rosso — Chianti o Morellino</div>
+      <div class="ing-origin">Chianti / Maremma, Toscana</div>
+    </div>
+  </div>
+  <div class="ing-story">Un Sangiovese toscano selezionato tra le denominazioni simbolo della regione: Chianti DOCG delle colline fiorentine e senesi, o Morellino di Scansano DOC dalla Maremma. Il Chianti è più elegante e floreale; il Morellino più caldo, maturo e morbido. Entrambi espressione autentica del Sangiovese — il vitigno che meglio interpreta la generosità e la semplicità della cucina toscana di tradizione. Questo è il vino del pasto, non della celebrazione — pensato per accompagnare ogni boccone.</div>
+  <div class="ing-note"><span class="ing-note-label">Abbinamento Chef Gabe:</span> Servi a 16°C con tutto il pasto. Inizia con il Salame e il Pecorino, poi accompagna la Ribollita e i Fagioli. È il filo rosso che lega tutti i sapori di questa box.</div>
+</div>
+  </div>
+</section>
+<div class="pairing-strip">
+  <h3 class="pairing-title">La ricetta di Chef Gabe</h3>
+  <p class="pairing-text">Prepara il tagliere dell'antipasto: Salame Toscano, Pecorino DOP e Marmellata artigianale. Riscalda la Ribollita lentamente con un mestolo di brodo, finisci con olio EVO abbondante. A parte, ripassi i Fagioli Zolfini lessati con la Salsa al Pomodoro, salvia e un filo di olio. Versa il vino rosso. Mangia lentamente.</p>
+  <div class="pairing-tags">
+    <span class="ptag">🍷 Chianti o Morellino</span>
+    <span class="ptag">🥖 Pane toscano sciocco</span>
+    <span class="ptag">🫒 Olio EVO abbondante</span>
+    <span class="ptag">🌿 Salvia fresca</span>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Tuscany<span>Box</span></div>
+      <p class="footer-tagline">Portare i sapori autentici della Toscana sulle tavole di tutto il mondo.</p>
+    </div>
+    <div><div class="fcol-title">Le Box</div><ul class="footer-links">
+      <li><a href="inferno.html">🔥 Inferno</a></li>
+      <li><a href="purgatorio.html">🌿 Purgatorio</a></li>
+      <li><a href="paradiso.html">☀️ Paradiso</a></li>
+    </ul></div>
+    <div><div class="fcol-title">Sito</div><ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#chef">Chef Gabe</a></li>
+      <li><a href="index.html#how">Come Funziona</a></li>
+    </ul></div>
+    <div><div class="fcol-title">Contatti</div><ul class="footer-links">
+      <li><a href="#">info@tuscanybox.com</a></li>
+      <li><a href="#">Firenze, Italy 🇮🇹</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Tuscany Box · In partnership with Chef Gabe Bertaccini</span>
+    <span><a href="index.html" style="color:inherit">← Torna alla home</a></span>
+  </div>
+</footer>
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').style.background=window.scrollY>60?'rgba(3,8,15,.97)':'rgba(3,8,15,.88)';
+});
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1});
+document.querySelectorAll('.ing-card').forEach(el=>observer.observe(el));
+// stars
+const canvas=document.getElementById('star-canvas');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+const stars=Array.from({length:120},()=>({
+  x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+  r:Math.random()*1.2+.2,speed:Math.random()*.003+.001,
+  phase:Math.random()*Math.PI*2
+}));
+let t=0;
+function drawStars(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  t+=0.016;
+  stars.forEach(s=>{
+    const op=.2+Math.sin(t*s.speed*60+s.phase)*.15;
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(200,220,255,${op})`;ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+</script>
+</body>
+</html>
